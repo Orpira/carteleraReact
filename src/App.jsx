@@ -74,7 +74,7 @@ function App({ onSubmit }) {
     let ignore = false;
     async function fetchSearch() {
       if (searchTerm.trim() === "") return;
-      const API_KEY = "915966e619bc1bab9238399ad1fe6e90";
+      const API_KEY = "123";
       const url = `${SEARCH_API}api_key=${API_KEY}&language=es-ES&query=${encodeURIComponent(
         searchTerm
       )}`;
