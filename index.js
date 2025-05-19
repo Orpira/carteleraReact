@@ -1,0 +1,9 @@
+export { default as Card } from "./src/components/Card/Card";
+export { default as Navbar } from "./src/components/Navbar/Navbar";
+export { default as Form } from "./src/components/Form/Form";
+export { default as Head } from "./src/components/Head/Head";
+export { default as Footer } from "./src/components/Footer/Footer";
+export { default as Checkbox } from "./src/components/Checkbox/Checkbox";
+export { default as ButtonCarrusel } from "./src/components/ButtonCarrusel/ButtonCarrusel";
+export { default as GenreCarousel } from "./src/components/GenreCarousel/GenreCarousel";
+export { default as Modal } from "./src/components/Modal/Modal";
