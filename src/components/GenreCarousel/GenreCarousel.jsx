@@ -1,28 +1,6 @@
-/**
- * GenreCarousel
- * Componente que muestra un carrusel horizontal de películas para un género específico.
- * Permite navegar entre grupos de películas usando botones de flecha.
- *
- * Props:
- * - genreName: string. Nombre del género a mostrar como título.
- * - movies: array. Lista de películas de ese género (cada una debe tener al menos id, title).
- * - carouselIndex: number. Índice actual del primer elemento visible en el carrusel.
- * - setCarouselIndex: function. Setter para actualizar el índice del carrusel.
- * - cardDetPop: array. Lista de detalles completos de las películas populares (para mostrar descripción, etc).
- * - maxTitleLength: number (opcional, default 22). Máximo de caracteres para el título antes de recortar con '...'.
- * - visibleCount: number (opcional, default 6). Número de películas visibles a la vez en el carrusel.
- *
- * Ejemplo de uso:
- * <GenreCarousel
- *   genreName="Acción"
- *   movies={arrayDePeliculas}
- *   carouselIndex={carouselIndexes["Acción"]}
- *   setCarouselIndex={fnSetCarouselIndex}
- *   cardDetPop={cardDetPop}
- * />
- */
-import React from "react";
+import React, { useState } from "react";
 import { ButtonCarrusel, Card } from "../../../index.js";
+import Modal from "../Modal/Modal";
 
 const GenreCarousel = ({
   genreName,
@@ -31,25 +9,39 @@ const GenreCarousel = ({
   setCarouselIndex,
   cardDetPop,
   maxTitleLength = 22,
-  visibleCount = 6,
+  visibleCount = 5, // Aseguramos que el número de cards visibles sea 5
 }) => {
-  let safeVisibleCount = Math.min(visibleCount, movies.length);
-  let start = carouselIndex;
-  let end = Math.min(start + safeVisibleCount, movies.length);
-  if (start < 0) start = 0;
-  if (end > movies.length) end = movies.length;
-  if (movies.length <= visibleCount) {
-    start = 0;
-    end = movies.length;
-  } else {
-    if (start > movies.length - safeVisibleCount) {
-      start = Math.max(movies.length - safeVisibleCount, 0);
-      end = movies.length;
-    }
+  // Estado para manejar el modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
+  // Función para abrir el modal con los datos de la película seleccionada
+  const openModal = (movie) => {
+    setSelectedMovie(movie);
+    setIsModalOpen(true);
+  };
+
+  // Función para cerrar el modal
+  const closeModal = () => {
+    setSelectedMovie(null);
+    setIsModalOpen(false);
+  };
+
+  // Validar las props
+  if (!Array.isArray(movies) || movies.length === 0) {
+    return <p>No hay películas disponibles para el género "{genreName}".</p>;
   }
+
+  // Aseguramos que siempre se muestren 5 cards
+  const safeVisibleCount = Math.min(visibleCount, movies.length);
+  const start = Math.max(0, carouselIndex);
+  const end = Math.min(start + safeVisibleCount, movies.length);
+
   const canPrev = start > 0;
   const canNext = end < movies.length;
+
   const visibleMovies = movies.slice(start, end);
+
   const goPrev = () =>
     setCarouselIndex(Math.max(carouselIndex - safeVisibleCount, 0));
   const goNext = () =>
@@ -59,6 +51,7 @@ const GenreCarousel = ({
         movies.length - safeVisibleCount
       )
     );
+
   return (
     <div key={genreName} className="w-full max-w-5xl">
       <h3 className="text-2xl font-semibold mb-4 pl-2">{genreName}</h3>
@@ -75,7 +68,12 @@ const GenreCarousel = ({
             if (card.title.length > maxTitleLength) {
               displayTitle = card.title.slice(0, maxTitleLength - 3) + "...";
             }
-            const cardData = cardDetPop.find((c) => c.id === card.id) || card;
+
+            // Validar cardDetPop
+            const cardData = Array.isArray(cardDetPop)
+              ? cardDetPop.find((c) => c.id === card.id) || card
+              : card;
+
             return (
               <div
                 key={card.id || idx}
@@ -87,6 +85,7 @@ const GenreCarousel = ({
                   title={displayTitle}
                   fullScreen={false}
                   useImg={true}
+                  onClick={() => openModal(cardData)} // Llama a openModal con los datos de la película
                 />
               </div>
             );
@@ -99,6 +98,9 @@ const GenreCarousel = ({
           className="right-0"
         />
       </div>
+
+      {/* Modal para mostrar detalles de la película */}
+      <Modal isOpen={isModalOpen} onClose={closeModal} data={selectedMovie} />
     </div>
   );
 };

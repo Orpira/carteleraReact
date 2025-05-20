@@ -1,27 +1,44 @@
 import React from "react";
 
-const Modal = ({ open, title, content, onClose }) => {
-  if (!open) return null;
+const Modal = ({ isOpen, onClose, data }) => {
+  if (!isOpen || !data) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50 animate-fade-in">
-      <div className="bg-white p-4 rounded-lg shadow-lg max-w-lg w-full text-gray-800 relative max-h-96 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6 relative">
+        {/* Botón para cerrar el modal */}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl font-bold"
+          className="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-2xl font-bold"
           onClick={onClose}
-          type="button"
           aria-label="Cerrar"
         >
           ×
         </button>
-        {title && (
-          <span className="block text-xl font-bold text-center mb-2">
-            {title}
-          </span>
-        )}
-        <p className="bg-[#222] p-5 rounded-[10px] w-full text-white">
-          {content}
-        </p>
+
+        {/* Header del modal */}
+        <header className="mb-4">
+          <h2 className="text-3xl font-bold text-gray-800">{data.title}</h2>
+        </header>
+
+        {/* Imagen de la película */}
+        <img
+          src={data.image}
+          alt={data.title}
+          className="w-full h-64 object-cover rounded-lg mb-4"
+        />
+
+        {/* Descripción de la película */}
+        <p className="text-gray-700 text-lg mb-4">{data.content}</p>
+
+        {/* Botón adicional */}
+        <div className="flex justify-end">
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            onClick={onClose}
+          >
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
   );

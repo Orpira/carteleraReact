@@ -70,10 +70,13 @@ const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
           <span className="block text-x font-bold text-center">{title}</span>
           <button
             className="mt-2 mb-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm"
-            onClick={handleShowContent}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick(); // Llama a la función pasada desde el padre (abre el modal)
+            }}
             type="button"
           >
-            {showContent ? "Ocultar descripción" : "Mas información"}
+            Más información
           </button>
           {showContent && (
             <div className="absolute inset-0 flex items-center justify-normal bg-black/80 rounded-xl z-20 animate-fade-in">

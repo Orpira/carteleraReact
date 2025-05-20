@@ -217,7 +217,7 @@ function App({ onSubmit }) {
                     setCarouselIndex={setCarouselIndex}
                     cardDetPop={cardDetPop}
                     maxTitleLength={22}
-                    visibleCount={6}
+                    visibleCount={4}
                   />
                 );
               })}

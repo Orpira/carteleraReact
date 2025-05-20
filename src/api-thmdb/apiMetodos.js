@@ -11,7 +11,7 @@ export async function fetchPopularMovies() {
   console.log("fetchPopularMovies inicio");
   //const LOCAL_API_KEY = await getConfig();
   // Si getConfig no funciona poner directamente la API_KEY
-  const LOCAL_API_KEY = "123";
+  const LOCAL_API_KEY = "915966e619bc1bab9238399ad1fe6e90";
 
   try {
     const response = await fetch(
@@ -28,7 +28,7 @@ export async function fetchPopularMovies() {
 
 // Obtener la película más trending
 export async function fetchTrendingMovies() {
-  const LOCAL_API_KEY = "123";
+  const LOCAL_API_KEY = "915966e619bc1bab9238399ad1fe6e90";
 
   try {
     const response = await fetch(
@@ -48,7 +48,7 @@ export async function fetchTrendingMovies() {
 }
 
 export async function fetchMovieDetails(movieId) {
-  const LOCAL_API_KEY = "123";
+  const LOCAL_API_KEY = "915966e619bc1bab9238399ad1fe6e90";
   try {
     const response = await fetch(
       `${BASE_URL}/movie/${movieId}?api_key=${LOCAL_API_KEY}&language=es-ES`
@@ -62,7 +62,7 @@ export async function fetchMovieDetails(movieId) {
 
 // Obtener la lista de géneros de películas
 export async function fetchMovieGenres() {
-  const LOCAL_API_KEY = "123";
+  const LOCAL_API_KEY = "915966e619bc1bab9238399ad1fe6e90";
   try {
     const response = await fetch(
       `${BASE_URL}/genre/movie/list?api_key=${LOCAL_API_KEY}&language=es-ES`
