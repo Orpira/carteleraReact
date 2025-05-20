@@ -74,3 +74,12 @@ export async function fetchMovieGenres() {
     return [];
   }
 }
+
+// Obtener películas por género
+export async function fetchMoviesByGenre(genreId, page = 1) {
+  const API_KEY = "915966e619bc1bab9238399ad1fe6e90"; // O usa tu método getConfig()
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&language=es-ES&page=${page}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.results;
+}
