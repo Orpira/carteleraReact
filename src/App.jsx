@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState, useRef } from "react";
 import { getInitialData } from "./config/initialData.js";
 
@@ -10,6 +9,8 @@ import {
   Card,
   ButtonCarrusel,
   GenreCarousel,
+  Form,
+  Modal, // Importa el Modal actualizado
 } from "../index.js";
 
 // Cargar datos iniciales desde un solo archivo
@@ -22,12 +23,10 @@ const {
   popularByGenre,
   DEFAULT_GENRES_TO_SHOW,
   initialGenres,
-  handleFormSubmit,
-  handleNavClick,
   SEARCH_API,
 } = await getInitialData();
 
-function App({ onSubmit }) {
+function App() {
   const [formResult, setFormResult] = useState(null);
   const [activeSection, setActiveSection] = useState("#login"); // sección activa
   const [currentIndex, setCurrentIndex] = useState(0); // índice del carrusel
@@ -36,8 +35,8 @@ function App({ onSubmit }) {
   const [carouselIndexes, setCarouselIndexes] = useState({}); // Estado global para los índices de carrusel por género
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedMovies, setSearchedMovies] = useState([]);
-  // Ref para hacer scroll a los resultados de búsqueda
-  const searchResultsRef = useRef(null);
+  const [isLoginFormVisible, setLoginFormVisible] = useState(false); // Estado para mostrar el formulario
+  const searchResultsRef = useRef(null); // Ref para hacer scroll a los resultados de búsqueda
 
   // UI para seleccionar géneros a mostrar
   const handleGenreChange = (genreName) => {
@@ -67,6 +66,21 @@ function App({ onSubmit }) {
       );
       setTransition(0);
     }, 300);
+  };
+
+  // Manejar clics en el Navbar
+  const handleNavClick = (href) => {
+    if (href === "#login") {
+      setLoginFormVisible(true); // Mostrar el formulario
+    } else {
+      setActiveSection(href); // Lógica existente
+    }
+  };
+
+  // Manejar envío del formulario
+  const handleFormSubmit = (data) => {
+    console.log("Datos enviados:", data);
+    setLoginFormVisible(false); // Ocultar el formulario después de enviar
   };
 
   // Hook para buscar películas en la API cuando searchTerm cambia
@@ -112,13 +126,17 @@ function App({ onSubmit }) {
         onSearch={setSearchTerm}
       />
       <main className="p-0 flex-1">
+        {/* Modal reutilizado para el formulario */}
+        <Modal isOpen={isLoginFormVisible} onClose={() => setLoginFormVisible(false)}>
+          <Form onSubmit={handleFormSubmit} />
+        </Modal>
+
         <section className="m-0 w-screen h-screen relative overflow-hidden">
           <div className="w-screen h-screen flex items-center justify-center">
             <div className="w-screen h-screen flex items-center justify-center relative overflow-hidden">
               <ButtonCarrusel
                 direction="left"
                 onClick={goToPrev}
-                // canPrev no existe aquí, siempre habilitado
               />
               <div
                 className={
@@ -140,7 +158,6 @@ function App({ onSubmit }) {
               <ButtonCarrusel
                 direction="right"
                 onClick={goToNext}
-                // canNext no existe aquí, siempre habilitado
               />
             </div>
           </div>

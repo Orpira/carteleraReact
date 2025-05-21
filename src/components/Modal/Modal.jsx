@@ -1,7 +1,7 @@
 import React from "react";
 
-const Modal = ({ isOpen, onClose, data }) => {
-  if (!isOpen || !data) return null;
+const Modal = ({ isOpen, onClose, data, children }) => {
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
@@ -15,30 +15,38 @@ const Modal = ({ isOpen, onClose, data }) => {
           ×
         </button>
 
-        {/* Header del modal */}
-        <header className="mb-4">
-          <h2 className="text-3xl font-bold text-gray-800">{data.title}</h2>
-        </header>
+        {/* Renderizar contenido dinámico */}
+        {data ? (
+          <>
+            {/* Header del modal */}
+            <header className="mb-4">
+              <h2 className="text-3xl font-bold text-gray-800">{data.title}</h2>
+            </header>
 
-        {/* Imagen de la película */}
-        <img
-          src={data.image}
-          alt={data.title}
-          className="w-full h-64 object-cover rounded-lg mb-4"
-        />
+            {/* Imagen de la película */}
+            <img
+              src={data.image}
+              alt={data.title}
+              className="w-full h-64 object-cover rounded-lg mb-4"
+            />
 
-        {/* Descripción de la película */}
-        <p className="text-gray-700 text-lg mb-4">{data.content}</p>
+            {/* Descripción de la película */}
+            <p className="text-gray-700 text-lg mb-4">{data.content}</p>
 
-        {/* Botón adicional */}
-        <div className="flex justify-end">
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-            onClick={onClose}
-          >
-            Cerrar
-          </button>
-        </div>
+            {/* Botón adicional */}
+            <div className="flex justify-end">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                onClick={onClose}
+              >
+                Cerrar
+              </button>
+            </div>
+          </>
+        ) : (
+          // Renderizar contenido pasado como children (por ejemplo, el formulario)
+          <div>{children}</div>
+        )}
       </div>
     </div>
   );
