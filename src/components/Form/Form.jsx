@@ -1,30 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Form = ({ onSubmit }) => {
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.target));
-    if (onSubmit) onSubmit(data);
+    if (!nombre || !email || !password) {
+      setError("Por favor, completa todos los campos.");
+      setSuccess("");
+      return;
+    }
+    setError("");
+    setSuccess(`¡Hola ${nombre}!`);
+    if (onSubmit) onSubmit({ nombre, email, password });
+  };
+
+  const handleChange = (setter) => (e) => {
+    setter(e.target.value);
+    setError("");
+    setSuccess("");
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-md p-6 w-full max-w-md mx-auto flex flex-col gap-4"
+      className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
     >
+      <input
+        name="nombre"
+        placeholder="Nombre"
+        className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        required
+      />
       <input
         name="email"
         type="email"
         placeholder="Email"
         className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        required
+        value={email}
+        onChange={handleChange(setEmail)}
       />
       <input
         name="password"
         type="password"
         placeholder="Contraseña"
         className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        required
+        value={password}
+        onChange={handleChange(setPassword)}
       />
       <button
         type="submit"
@@ -32,6 +58,12 @@ const Form = ({ onSubmit }) => {
       >
         Enviar
       </button>
+      {error && (
+        <div className="text-red-500 mt-2" role="alert">{error}</div>
+      )}
+      {success && (
+        <div data-testid="success-message" className="text-green-600 mt-2">{success}</div>
+      )}
     </form>
   );
 };

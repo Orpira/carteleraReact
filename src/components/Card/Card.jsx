@@ -20,7 +20,7 @@ const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
       onMouseLeave={() => setHovered(false)}
       onClick={onClick}
     >
-      {useImg ? (
+      {useImg !== false ? (
         <img
           src={image}
           alt={title}
@@ -63,16 +63,19 @@ const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
             : "text-lg mt-2 mb-1 truncate w-full block"
         }`}
         title={title}
-      ></h3>
+      >
+        {title}
+      </h3>
       {/* Solo mostrar el botón y el contenido en cards populares (no fullScreen) */}
       {!fullScreen && (
         <>
-          <span className="block text-x font-bold text-center">{title}</span>
+          {/* Eliminado el span duplicado del título */}
+          <span className="block text-base text-gray-700 mb-2">{content}</span>
           <button
             className="mt-2 mb-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm"
             onClick={(e) => {
               e.stopPropagation();
-              onClick(); // Llama a la función pasada desde el padre (abre el modal)
+              onClick && onClick();
             }}
             type="button"
           >

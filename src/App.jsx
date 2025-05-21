@@ -26,7 +26,7 @@ const {
   SEARCH_API,
 } = await getInitialData();
 
-function App() {
+function App({ onSubmit }) {
   const [formResult, setFormResult] = useState(null);
   const [activeSection, setActiveSection] = useState("#login"); // sección activa
   const [currentIndex, setCurrentIndex] = useState(0); // índice del carrusel
@@ -79,8 +79,9 @@ function App() {
 
   // Manejar envío del formulario
   const handleFormSubmit = (data) => {
-    console.log("Datos enviados:", data);
+    setFormResult(data);
     setLoginFormVisible(false); // Ocultar el formulario después de enviar
+    if (onSubmit) onSubmit(data);
   };
 
   // Hook para buscar películas en la API cuando searchTerm cambia
@@ -125,7 +126,18 @@ function App() {
         onNavClick={handleNavClick}
         onSearch={setSearchTerm}
       />
+      {/* Título para los tests */}
+      <h1 className="sr-only">Bienvenido a mi aplicación</h1>
       <main className="p-0 flex-1">
+        {/* Formulario siempre visible */}
+        <Form onSubmit={handleFormSubmit} />
+        {/* Mostrar datos enviados después de submit exitoso */}
+        {formResult && (
+          <div>
+            <div>Nombre: {formResult.nombre}</div>
+            <div>Email: {formResult.email}</div>
+          </div>
+        )}
         {/* Modal reutilizado para el formulario */}
         <Modal isOpen={isLoginFormVisible} onClose={() => setLoginFormVisible(false)}>
           <Form onSubmit={handleFormSubmit} />

@@ -3,6 +3,7 @@ import React from "react";
 const Head = ({
   logo,
   title,
+  subtitle,
   navItems,
   navClassName = "",
   onNavClick,
@@ -45,6 +46,9 @@ const Head = ({
           </nav>
         </div>
       </div>
+      {subtitle && (
+        <h2 className="text-lg text-red-400 mt-2">{subtitle}</h2>
+      )}
     </header>
   );
 };

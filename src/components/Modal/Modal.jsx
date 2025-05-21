@@ -45,7 +45,7 @@ const Modal = ({ isOpen, onClose, data, children }) => {
           </>
         ) : (
           // Renderizar contenido pasado como children (por ejemplo, el formulario)
-          <div>{children}</div>
+          <div style={{ display: 'contents' }}>{children}</div>
         )}
       </div>
     </div>
