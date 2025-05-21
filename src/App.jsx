@@ -129,8 +129,6 @@ function App({ onSubmit }) {
       {/* Título para los tests */}
       <h1 className="sr-only">Bienvenido a mi aplicación</h1>
       <main className="p-0 flex-1">
-        {/* Formulario siempre visible */}
-        <Form onSubmit={handleFormSubmit} />
         {/* Mostrar datos enviados después de submit exitoso */}
         {formResult && (
           <div>
