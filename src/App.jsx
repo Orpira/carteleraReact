@@ -136,7 +136,7 @@ function App({ onSubmit }) {
             <div>Email: {formResult.email}</div>
           </div>
         )}
-        {/* Modal para formulario */}
+        {/* Modal reutilizado para el formulario */}
         <Modal isOpen={isLoginFormVisible} onClose={() => setLoginFormVisible(false)}>
           <Form onSubmit={handleFormSubmit} />
         </Modal>
@@ -159,10 +159,7 @@ function App({ onSubmit }) {
         <section className="m-0 w-screen h-screen relative overflow-hidden">
           <div className="w-screen h-screen flex items-center justify-center">
             <div className="w-screen h-screen flex items-center justify-center relative overflow-hidden">
-              <ButtonCarrusel
-                direction="left"
-                onClick={goToPrev}
-              />
+              <ButtonCarrusel direction="left" onClick={goToPrev} />
               <div
                 className={
                   "w-screen h-screen flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)] " +
@@ -180,10 +177,7 @@ function App({ onSubmit }) {
                   useImg={false}
                 />
               </div>
-              <ButtonCarrusel
-                direction="right"
-                onClick={goToNext}
-              />
+              <ButtonCarrusel direction="right" onClick={goToNext} />
             </div>
           </div>
         </section>
