@@ -5,7 +5,7 @@ import { getInitialData } from "./config/initialData.js";
 import {
   Head,
   Footer,
-  Checkbox,
+  GenreSelect,
   Card,
   ButtonCarrusel,
   GenreCarousel,
@@ -92,7 +92,9 @@ function App({ onSubmit }) {
     async function fetchSearch() {
       if (searchTerm.trim() === "") return;
       const LOCAL_API_KEY = import.meta.env.VITE_API_KEY;
-      const url = `${SEARCH_API}api_key=${LOCAL_API_KEY}&language=es-ES&query=${encodeURIComponent(searchTerm)}`;
+      const url = `${SEARCH_API}api_key=${LOCAL_API_KEY}&language=es-ES&query=${encodeURIComponent(
+        searchTerm
+      )}`;
       const res = await fetch(url);
       const data = await res.json();
       if (!ignore && data.results) {
@@ -130,12 +132,18 @@ function App({ onSubmit }) {
       <h1 className="sr-only">Bienvenido a mi aplicación</h1>
       <main className="p-0 flex-1">
         {/* Modal reutilizado para el formulario */}
-        <Modal isOpen={isLoginFormVisible} onClose={() => setLoginFormVisible(false)}>
+        <Modal
+          isOpen={isLoginFormVisible}
+          onClose={() => setLoginFormVisible(false)}
+        >
           <Form onSubmit={handleFormSubmit} />
         </Modal>
-        
+
         {/* Modal para detalles de película */}
-        <Modal isOpen={isMovieModalVisible} onClose={() => setIsMovieModalVisible(false)}>
+        <Modal
+          isOpen={isMovieModalVisible}
+          onClose={() => setIsMovieModalVisible(false)}
+        >
           {selectedMovie && (
             <div className="p-6">
               <h2 className="text-2xl font-bold mb-4">{selectedMovie.title}</h2>
@@ -163,6 +171,13 @@ function App({ onSubmit }) {
                     : "-translate-x-full")
                 }
               >
+                <div className="absolute top-6 left-8 z-20">
+                  <GenreSelect
+                    genresList={genresList}
+                    selectedGenre={selectedGenres[0] || ""}
+                    onChange={(value) => setSelectedGenres([value])}
+                  />
+                </div>
                 <Card
                   key={currentIndex}
                   {...cardDetails[currentIndex]}
@@ -177,13 +192,6 @@ function App({ onSubmit }) {
 
         {/* Espacio entre secciones */}
         <div className="h-10 w-full" />
-
-        {/* Selector de géneros */}
-        <Checkbox
-          genresList={genresList}
-          selectedGenres={selectedGenres}
-          handleGenreChange={handleGenreChange}
-        />
 
         {/* Carruseles de populares por género o resultados de búsqueda global */}
         {searchTerm.trim() !== "" ? (

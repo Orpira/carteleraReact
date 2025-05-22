@@ -7,3 +7,4 @@ export { default as Checkbox } from "./src/components/Checkbox/Checkbox";
 export { default as ButtonCarrusel } from "./src/components/ButtonCarrusel/ButtonCarrusel";
 export { default as GenreCarousel } from "./src/components/GenreCarousel/GenreCarousel";
 export { default as Modal } from "./src/components/Modal/Modal";
+export { default as GenreSelect } from "./src/components/GenreSelect/GenreSelect";
