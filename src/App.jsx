@@ -129,13 +129,6 @@ function App({ onSubmit }) {
       {/* Título para los tests */}
       <h1 className="sr-only">Bienvenido a mi aplicación</h1>
       <main className="p-0 flex-1">
-        {/* Mostrar datos enviados después de submit exitoso */}
-        {formResult && (
-          <div>
-            <div>Nombre: {formResult.nombre}</div>
-            <div>Email: {formResult.email}</div>
-          </div>
-        )}
         {/* Modal reutilizado para el formulario */}
         <Modal isOpen={isLoginFormVisible} onClose={() => setLoginFormVisible(false)}>
           <Form onSubmit={handleFormSubmit} />
