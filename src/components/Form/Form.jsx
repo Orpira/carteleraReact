@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const Form = ({ onSubmit }) => {
-  const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -9,14 +8,14 @@ const Form = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!nombre || !email || !password) {
+    if ( !email || !password) {
       setError("Por favor, completa todos los campos.");
       setSuccess("");
       return;
     }
     setError("");
-    setSuccess(`¡Hola ${nombre}!`);
-    if (onSubmit) onSubmit({ nombre, email, password });
+    setSuccess(`¡Bienveni@!`);
+    if (onSubmit) onSubmit({ email, password });
   };
 
   const handleChange = (setter) => (e) => {

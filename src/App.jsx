@@ -127,25 +127,19 @@ function App({ onSubmit }) {
       {/* Título para los tests */}
       <h1 className="sr-only">Bienvenido a mi aplicación</h1>
       <main className="p-0 flex-1">
-        {/* Mostrar datos enviados después de submit exitoso */}
-        {formResult && (
-          <div>
-            <div>Nombre: {formResult.nombre}</div>
-            <div>Email: {formResult.email}</div>
-          </div>
-        )}
+       
         {/* Modal reutilizado para el formulario */}
-        <Modal isOpen={isLoginFormVisible} onClose={() => setLoginFormVisible(false)}>
+        <Modal
+          isOpen={isLoginFormVisible}
+          onClose={() => setLoginFormVisible(false)}
+        >
           <Form onSubmit={handleFormSubmit} />
         </Modal>
 
         <section className="m-0 w-screen h-screen relative overflow-hidden">
           <div className="w-screen h-screen flex items-center justify-center">
             <div className="w-screen h-screen flex items-center justify-center relative overflow-hidden">
-              <ButtonCarrusel
-                direction="left"
-                onClick={goToPrev}
-              />
+              <ButtonCarrusel direction="left" onClick={goToPrev} />
               <div
                 className={
                   "w-screen h-screen flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)] " +
@@ -163,10 +157,7 @@ function App({ onSubmit }) {
                   useImg={false}
                 />
               </div>
-              <ButtonCarrusel
-                direction="right"
-                onClick={goToNext}
-              />
+              <ButtonCarrusel direction="right" onClick={goToNext} />
             </div>
           </div>
         </section>
