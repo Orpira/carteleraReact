@@ -89,10 +89,8 @@ function App({ onSubmit }) {
     let ignore = false;
     async function fetchSearch() {
       if (searchTerm.trim() === "") return;
-      const API_KEY = "123";
-      const url = `${SEARCH_API}api_key=${API_KEY}&language=es-ES&query=${encodeURIComponent(
-        searchTerm
-      )}`;
+      const LOCAL_API_KEY = import.meta.env.VITE_API_KEY;
+      const url = `${SEARCH_API}api_key=${LOCAL_API_KEY}&language=es-ES&query=${encodeURIComponent(searchTerm)}`;
       const res = await fetch(url);
       const data = await res.json();
       if (!ignore && data.results) {
