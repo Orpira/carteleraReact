@@ -35,6 +35,8 @@ function App({ onSubmit }) {
   const [carouselIndexes, setCarouselIndexes] = useState({}); // Estado global para los índices de carrusel por género
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedMovies, setSearchedMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
   const [isLoginFormVisible, setLoginFormVisible] = useState(false); // Estado para mostrar el formulario
   const searchResultsRef = useRef(null); // Ref para hacer scroll a los resultados de búsqueda
 
@@ -134,9 +136,24 @@ function App({ onSubmit }) {
             <div>Email: {formResult.email}</div>
           </div>
         )}
-        {/* Modal reutilizado para el formulario */}
+        {/* Modal para formulario */}
         <Modal isOpen={isLoginFormVisible} onClose={() => setLoginFormVisible(false)}>
           <Form onSubmit={handleFormSubmit} />
+        </Modal>
+        
+        {/* Modal para detalles de película */}
+        <Modal isOpen={isMovieModalVisible} onClose={() => setIsMovieModalVisible(false)}>
+          {selectedMovie && (
+            <div className="p-6">
+              <h2 className="text-2xl font-bold mb-4">{selectedMovie.title}</h2>
+              <img
+                src={`https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}`}
+                alt={selectedMovie.title}
+                className="w-full h-96 object-cover mb-4 rounded-lg"
+              />
+              <p className="text-gray-600">{selectedMovie.overview}</p>
+            </div>
+          )}
         </Modal>
 
         <section className="m-0 w-screen h-screen relative overflow-hidden">
@@ -213,6 +230,10 @@ function App({ onSubmit }) {
                         image={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                         fullScreen={false}
                         useImg={true}
+                        onClick={() => {
+                          setSelectedMovie(movie);
+                          setIsMovieModalVisible(true);
+                        }}
                       />
                     </div>
                   );
