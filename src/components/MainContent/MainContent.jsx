@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
-import Checkbox from "../Checkbox/Checkbox.jsx";
-import Card from "../Card/Card.jsx";
-import ButtonCarrusel from "../ButtonCarrusel/ButtonCarrusel.jsx";
-import GenreCarousel from "../GenreCarousel/GenreCarousel.jsx";
-import Modal from "../Modal/Modal.jsx";
+import {
+  Checkbox,
+  Card,
+  ButtonCarrusel,
+  GenreCarousel,
+  Modal,
+} from "../../../index.js";
 
 const MainContent = ({
   cardDetails,
