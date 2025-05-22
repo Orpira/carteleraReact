@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Form = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate(); // Hook para redirigir
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if ( !email || !password) {
+    if (!email || !password) {
       setError("Por favor, completa todos los campos.");
       setSuccess("");
       return;
@@ -16,6 +18,9 @@ const Form = ({ onSubmit }) => {
     setError("");
     setSuccess(`¡Bienveni@!`);
     if (onSubmit) onSubmit({ email, password });
+
+    // Redirigir al perfil
+    navigate("/profile");
   };
 
   const handleChange = (setter) => (e) => {
@@ -52,10 +57,14 @@ const Form = ({ onSubmit }) => {
         Enviar
       </button>
       {error && (
-        <div className="text-red-500 mt-2" role="alert">{error}</div>
+        <div className="text-red-500 mt-2" role="alert">
+          {error}
+        </div>
       )}
       {success && (
-        <div data-testid="success-message" className="text-green-600 mt-2">{success}</div>
+        <div data-testid="success-message" className="text-green-600 mt-2">
+          {success}
+        </div>
       )}
     </form>
   );
