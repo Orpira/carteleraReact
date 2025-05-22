@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import { getInitialData } from "./config/initialData.js";
 
 // Importa los componentes desde tus librerías personalizadas
 import {
   Head,
   Footer,
-  GenreSelect,
+  Checkbox,
   Card,
   ButtonCarrusel,
   GenreCarousel,
@@ -39,6 +40,7 @@ function App({ onSubmit }) {
   const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
   const [isLoginFormVisible, setLoginFormVisible] = useState(false); // Estado para mostrar el formulario
   const searchResultsRef = useRef(null); // Ref para hacer scroll a los resultados de búsqueda
+  const navigate = useNavigate(); // Hook para redirigir
 
   // UI para seleccionar géneros a mostrar
   const handleGenreChange = (genreName) => {
@@ -84,6 +86,9 @@ function App({ onSubmit }) {
     setFormResult(data);
     setLoginFormVisible(false); // Ocultar el formulario después de enviar
     if (onSubmit) onSubmit(data);
+
+    // Redirigir al perfil después de iniciar sesión
+    navigate("/profile");
   };
 
   // Hook para buscar películas en la API cuando searchTerm cambia
@@ -171,13 +176,6 @@ function App({ onSubmit }) {
                     : "-translate-x-full")
                 }
               >
-                <div className="absolute top-6 left-8 z-20">
-                  <GenreSelect
-                    genresList={genresList}
-                    selectedGenre={selectedGenres[0] || ""}
-                    onChange={(value) => setSelectedGenres([value])}
-                  />
-                </div>
                 <Card
                   key={currentIndex}
                   {...cardDetails[currentIndex]}
@@ -192,6 +190,13 @@ function App({ onSubmit }) {
 
         {/* Espacio entre secciones */}
         <div className="h-10 w-full" />
+
+        {/* Selector de géneros */}
+        <Checkbox
+          genresList={genresList}
+          selectedGenres={selectedGenres}
+          handleGenreChange={handleGenreChange}
+        />
 
         {/* Carruseles de populares por género o resultados de búsqueda global */}
         {searchTerm.trim() !== "" ? (

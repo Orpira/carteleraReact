@@ -1,0 +1,214 @@
+import React, { useState, useRef } from "react";
+import Checkbox from "../Checkbox/Checkbox.jsx";
+import Card from "../Card/Card.jsx";
+import ButtonCarrusel from "../ButtonCarrusel/ButtonCarrusel.jsx";
+import GenreCarousel from "../GenreCarousel/GenreCarousel.jsx";
+import Modal from "../Modal/Modal.jsx";
+
+const MainContent = ({
+  cardDetails,
+  genresList,
+  popularByGenre,
+  initialGenres,
+  SEARCH_API,
+  cardDetPop,
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [transition, setTransition] = useState(0);
+  const [selectedGenres, setSelectedGenres] = useState(initialGenres);
+  const [carouselIndexes, setCarouselIndexes] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchedMovies, setSearchedMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
+  const searchResultsRef = useRef(null);
+
+  const handleGenreChange = (genreName) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genreName)
+        ? prev.filter((g) => g !== genreName)
+        : [...prev, genreName]
+    );
+  };
+
+  const goToPrev = () => {
+    setTransition(-1);
+    setTimeout(() => {
+      setCurrentIndex((prev) =>
+        prev === 0 ? cardDetails.length - 1 : prev - 1
+      );
+      setTransition(0);
+    }, 300);
+  };
+
+  const goToNext = () => {
+    setTransition(1);
+    setTimeout(() => {
+      setCurrentIndex((prev) =>
+        prev === cardDetails.length - 1 ? 0 : prev + 1
+      );
+      setTransition(0);
+    }, 300);
+  };
+
+  React.useEffect(() => {
+    let ignore = false;
+    async function fetchSearch() {
+      if (searchTerm.trim() === "") return;
+      const LOCAL_API_KEY = import.meta.env.VITE_API_KEY;
+      const url = `${SEARCH_API}api_key=${LOCAL_API_KEY}&language=es-ES&query=${encodeURIComponent(
+        searchTerm
+      )}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!ignore && data.results) {
+        setSearchedMovies(data.results);
+      }
+    }
+    fetchSearch();
+    return () => {
+      ignore = true;
+    };
+  }, [searchTerm]);
+
+  React.useEffect(() => {
+    if (searchTerm.trim() !== "" && searchResultsRef.current) {
+      setTimeout(() => {
+        searchResultsRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 2800);
+    }
+  }, [searchTerm]);
+
+  return (
+    <main className="p-0 flex-1">
+      {/* Modal para detalles de película */}
+      <Modal
+        isOpen={isMovieModalVisible}
+        onClose={() => setIsMovieModalVisible(false)}
+      >
+        {selectedMovie && (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-4">{selectedMovie.title}</h2>
+            <img
+              src={`https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}`}
+              alt={selectedMovie.title}
+              className="w-full h-96 object-cover mb-4 rounded-lg"
+            />
+            <p className="text-gray-600">{selectedMovie.overview}</p>
+          </div>
+        )}
+      </Modal>
+
+      <section className="m-0 w-screen h-screen relative overflow-hidden">
+        <div className="w-screen h-screen flex items-center justify-center">
+          <div className="w-screen h-screen flex items-center justify-center relative overflow-hidden">
+            <ButtonCarrusel direction="left" onClick={goToPrev} />
+            <div
+              className={
+                "w-screen h-screen flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)] " +
+                (transition === 0
+                  ? "translate-x-0"
+                  : transition === 1
+                  ? "translate-x-full"
+                  : "-translate-x-full")
+              }
+            >
+              <Card
+                key={currentIndex}
+                {...cardDetails[currentIndex]}
+                fullScreen
+                useImg={false}
+              />
+            </div>
+            <ButtonCarrusel direction="right" onClick={goToNext} />
+          </div>
+        </div>
+      </section>
+
+      <div className="h-10 w-full" />
+
+      <Checkbox
+        genresList={genresList}
+        selectedGenres={selectedGenres}
+        handleGenreChange={handleGenreChange}
+      />
+
+      {searchTerm.trim() !== "" ? (
+        <section
+          ref={searchResultsRef}
+          className="w-full min-h-screen flex flex-col items-center p-8"
+        >
+          <h2 className="text-2xl font-bold mb-6">Resultados de búsqueda</h2>
+          <div className="flex flex-wrap gap-6 justify-center">
+            {searchedMovies.length === 0 ? (
+              <p className="text-lg text-gray-500">
+                No se encontraron resultados.
+              </p>
+            ) : (
+              searchedMovies.map((movie) => {
+                const details =
+                  cardDetPop.find((c) => c.id === movie.id) || movie;
+                let displayTitle = details.title;
+                if (displayTitle && displayTitle.length > 22) {
+                  displayTitle = displayTitle.slice(0, 19) + "...";
+                }
+                return (
+                  <div
+                    key={movie.id}
+                    className="flex-shrink-0"
+                    style={{ width: 220 }}
+                  >
+                    <Card
+                      {...details}
+                      title={displayTitle}
+                      image={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                      fullScreen={false}
+                      useImg={true}
+                      onClick={() => {
+                        setSelectedMovie(movie);
+                        setIsMovieModalVisible(true);
+                      }}
+                    />
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </section>
+      ) : (
+        <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-gray-50">
+          <div className="w-full flex flex-col gap-12 items-center p-8">
+            {selectedGenres.map((genreName) => {
+              const movies = popularByGenre[genreName] || [];
+              if (!movies.length) return null;
+              const carouselIndex = carouselIndexes[genreName] || 0;
+              const setCarouselIndex = (newIndex) => {
+                setCarouselIndexes((prev) => ({
+                  ...prev,
+                  [genreName]: newIndex,
+                }));
+              };
+              return (
+                <GenreCarousel
+                  key={genreName}
+                  genreName={genreName}
+                  movies={movies}
+                  carouselIndex={carouselIndex}
+                  setCarouselIndex={setCarouselIndex}
+                  cardDetPop={cardDetPop}
+                  maxTitleLength={22}
+                  visibleCount={4}
+                />
+              );
+            })}
+          </div>
+        </section>
+      )}
+    </main>
+  );
+};
+
+export default MainContent;
