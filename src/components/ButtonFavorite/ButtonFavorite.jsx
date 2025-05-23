@@ -7,7 +7,7 @@ const ButtonFavorite = ({ isFavorite, onToggle }) => {
         e.stopPropagation(); // evita que se dispare el evento del padre (como abrir modal)
         onToggle();
       }}
-      className={`absolute top-2 right-2 z-20 transition-transform duration-300 ${
+      className={`absolute right-2 z-20 transition-transform duration-300 ${
         isFavorite ? "text-red-500 animate-heartbeat" : "text-gray-400"
       }`}
       aria-label="Favorito"
