@@ -27,7 +27,7 @@ const Modal = ({ isOpen, onClose, data, children }) => {
             <img
               src={data.image}
               alt={data.title}
-              className="w-full h-64 object-cover rounded-lg mb-4"
+              className="w-full h-auto max-h-[400px] object-contain rounded-lg mb-4"
             />
 
             {/* Descripción de la película */}
