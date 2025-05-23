@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { ButtonFavorite } from "../../../index.js";
+import { useLocation } from "react-router-dom";
 
 const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
+  const location = useLocation();
+  const isProfilePage = location.pathname === '/profile';
   const [hovered, setHovered] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -22,8 +25,14 @@ const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
           ? "w-screen h-screen flex flex-col justify-end items-start p-10 bg-transparent overflow-hidden"
           : "bg-white rounded-xl shadow-md p-5 w-[220px] text-center transition duration-200 cursor-pointer"
       } ${hovered && !fullScreen ? "shadow-lg scale-105" : ""}`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => {
+        setHovered(true);
+        setShowContent(true);
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+        setShowContent(false);
+      }}
       onClick={onClick}
     >
       {useImg ? (
@@ -71,7 +80,7 @@ const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
         title={title}
       ></h3>
       {/* Solo mostrar el botón y el contenido en cards populares (no fullScreen) */}
-      {!fullScreen && (
+      {!fullScreen && isProfilePage && (
         <>
           <span className="block text-x font-bold text-center">{title}</span>
           <div className="flex items-center justify-between mt-2 mb-1">
