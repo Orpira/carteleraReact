@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import Profile from "./components/Profile/Profile.jsx"; // Asegúrate de tener este componente
+import Profile from "../index.js"; // Asegúrate de tener este componente
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
