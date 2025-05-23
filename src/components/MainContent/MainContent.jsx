@@ -14,6 +14,7 @@ const MainContent = ({
   initialGenres,
   SEARCH_API,
   cardDetPop,
+  continueWatching, // Recibir "Seguir viendo" como prop
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(0);
@@ -184,6 +185,25 @@ const MainContent = ({
       ) : (
         <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-gray-50">
           <div className="w-full flex flex-col gap-12 items-center p-8">
+            {/* Carrusel de "Seguir viendo" */}
+            {continueWatching && continueWatching.length > 0 && (
+              <GenreCarousel
+                genreName="Seguir viendo"
+                movies={continueWatching}
+                carouselIndex={carouselIndexes["Seguir viendo"] || 0}
+                setCarouselIndex={(newIndex) =>
+                  setCarouselIndexes((prev) => ({
+                    ...prev,
+                    "Seguir viendo": newIndex,
+                  }))
+                }
+                cardDetPop={cardDetPop}
+                maxTitleLength={22}
+                visibleCount={4}
+              />
+            )}
+
+            {/* Carruseles de géneros */}
             {selectedGenres.map((genreName) => {
               const movies = popularByGenre[genreName] || [];
               if (!movies.length) return null;
