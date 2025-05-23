@@ -15,6 +15,7 @@ const MainContent = ({
   SEARCH_API,
   cardDetPop,
   continueWatching, // Recibir "Seguir viendo" como prop
+  isKidsProfile, // Recibir el estado del perfil infantil
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(0);
@@ -25,6 +26,31 @@ const MainContent = ({
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
   const searchResultsRef = useRef(null);
+
+  // Filtrar contenido infantil
+ const filterKidsContent = (movies) => {
+   if (!isKidsProfile) return movies; // Si no es perfil infantil, mostrar todo
+
+   const allowedRatings = ["G", "PG"]; // Clasificaciones aptas para niños
+   const allowedGenres = ["Animación", "Familia", "Infantil"]; // Géneros aptos para niños
+
+   return movies.filter((movie) => {
+     // Verificar clasificación
+     const rating = movie.rating || movie.certification || movie.classification;
+     if (rating && allowedRatings.includes(rating)) {
+       return true;
+     }
+
+     // Verificar género
+     const genres = movie.genres || [];
+     if (genres.some((genre) => allowedGenres.includes(genre))) {
+       return true;
+     }
+
+     // Si no cumple con ninguna condición, excluir la película
+     return false;
+   });
+ };
 
   const handleGenreChange = (genreName) => {
     setSelectedGenres((prev) =>
@@ -189,7 +215,7 @@ const MainContent = ({
             {continueWatching && continueWatching.length > 0 && (
               <GenreCarousel
                 genreName="Seguir viendo"
-                movies={continueWatching}
+                movies={filterKidsContent(continueWatching)} // Aplicar filtro
                 carouselIndex={carouselIndexes["Seguir viendo"] || 0}
                 setCarouselIndex={(newIndex) =>
                   setCarouselIndexes((prev) => ({
@@ -205,7 +231,7 @@ const MainContent = ({
 
             {/* Carruseles de géneros */}
             {selectedGenres.map((genreName) => {
-              const movies = popularByGenre[genreName] || [];
+              const movies = filterKidsContent(popularByGenre[genreName] || []);
               if (!movies.length) return null;
               const carouselIndex = carouselIndexes[genreName] || 0;
               const setCarouselIndex = (newIndex) => {

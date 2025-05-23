@@ -51,23 +51,27 @@ export async function getInitialData() {
   const genresList = await fetchMovieGenres();
 
   // Obtener más películas por género (unir varias páginas)
-  const popularByGenre = {};
-  for (const genre of genresList) {
-    const page1 = await fetchMoviesByGenre(genre.id, 1);
-    const page2 = await fetchMoviesByGenre(genre.id, 2);
-    // Unir, quitar duplicados y filtrar solo las que tienen poster
-    const allMovies = [...page1, ...page2]
-      .filter((movie, idx, arr) => arr.findIndex(m => m.id === movie.id) === idx)
-      .filter(movie => movie.poster_path);
-    // Adaptar formato para que cada película tenga image, title y content
-    popularByGenre[genre.name] = allMovies.map(movie => ({
-      ...movie,
-      image: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
-      title: movie.title,
-      content: movie.overview,
-      onClick: () => {},
-    }));
-  }
+ const popularByGenre = {};
+for (const genre of genresList) {
+  const page1 = await fetchMoviesByGenre(genre.id, 1);
+  const page2 = await fetchMoviesByGenre(genre.id, 2);
+
+  // Unir, quitar duplicados y filtrar solo las que tienen poster
+  const allMovies = [...page1, ...page2]
+    .filter((movie, idx, arr) => arr.findIndex((m) => m.id === movie.id) === idx)
+    .filter((movie) => movie.poster_path);
+
+  // Adaptar formato para que cada película tenga las propiedades necesarias
+  popularByGenre[genre.name] = allMovies.map((movie) => ({
+    ...movie,
+    image: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
+    title: movie.title,
+    content: movie.overview,
+    genres: movie.genre_ids.map((id) => genresList.find((g) => g.id === id)?.name || "Desconocido"), // Mapear IDs de géneros a nombres
+    rating: movie.vote_average >= 7 ? "PG" : "G", // Ejemplo: asignar clasificación basada en el puntaje
+    onClick: () => {},
+  }));
+}
 
   const DEFAULT_GENRES_TO_SHOW = 4;
   const initialGenres = genresList

@@ -20,13 +20,17 @@ const Profile = () => {
       id: 1,
       title: "Serie Ejemplo 1",
       thumbnail: "https://via.placeholder.com/150",
-      progress: "00:15:30",
+      progress: "00:15:30", // Tiempo donde se pausó
+      genres: ["Animación", "Familia"], // Géneros aptos para niños
+      rating: "G", // Clasificación apta para niños
     },
     {
       id: 2,
       title: "Película Ejemplo 2",
       thumbnail: "https://via.placeholder.com/150",
       progress: "01:05:20",
+      genres: ["Infantil"],
+      rating: "PG",
     },
   ]);
 
@@ -114,6 +118,7 @@ const Profile = () => {
         SEARCH_API={SEARCH_API}
         cardDetPop={cardDetPop}
         continueWatching={continueWatching}
+        isKidsProfile={isKidsProfile} // Pasar el estado del perfil infantil
       />
     </div>
   );
