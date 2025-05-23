@@ -6,7 +6,7 @@ import { getInitialData } from "./config/initialData.js";
 import {
   Head,
   Footer,
-  Checkbox,
+  GenreSelect,
   Card,
   ButtonCarrusel,
   GenreCarousel,
@@ -192,11 +192,6 @@ function App({ onSubmit }) {
         <div className="h-10 w-full" />
 
         {/* Selector de géneros */}
-        <Checkbox
-          genresList={genresList}
-          selectedGenres={selectedGenres}
-          handleGenreChange={handleGenreChange}
-        />
 
         {/* Carruseles de populares por género o resultados de búsqueda global */}
         {searchTerm.trim() !== "" ? (

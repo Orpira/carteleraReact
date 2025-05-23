@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import {
-  Checkbox,
+  GenreSelect,
   Card,
   ButtonCarrusel,
   GenreCarousel,
@@ -118,6 +118,13 @@ const MainContent = ({
                   : "-translate-x-full")
               }
             >
+              <div className="absolute top-6 left-8 z-20">
+                <GenreSelect
+                  genresList={genresList}
+                  selectedGenre={selectedGenres[0] || ""}
+                  onChange={(value) => setSelectedGenres([value])}
+                />
+              </div>
               <Card
                 key={currentIndex}
                 {...cardDetails[currentIndex]}
@@ -131,12 +138,6 @@ const MainContent = ({
       </section>
 
       <div className="h-10 w-full" />
-
-      <Checkbox
-        genresList={genresList}
-        selectedGenres={selectedGenres}
-        handleGenreChange={handleGenreChange}
-      />
 
       {searchTerm.trim() !== "" ? (
         <section

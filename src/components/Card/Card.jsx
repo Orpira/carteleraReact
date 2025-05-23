@@ -1,8 +1,14 @@
 import React, { useState } from "react";
+import { ButtonFavorite } from "../../../index.js";
 
 const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
   const [hovered, setHovered] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorite((prev) => !prev);
+  };
 
   const handleShowContent = (e) => {
     e.stopPropagation();
@@ -68,16 +74,22 @@ const Card = ({ image, title, content, onClick, fullScreen, useImg }) => {
       {!fullScreen && (
         <>
           <span className="block text-x font-bold text-center">{title}</span>
-          <button
-            className="mt-2 mb-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClick(); // Llama a la función pasada desde el padre (abre el modal)
-            }}
-            type="button"
-          >
-            Más información
-          </button>
+          <div className="flex items-center justify-between mt-2 mb-1">
+            {/* Botón de favorito a la izquierda */}
+            <ButtonFavorite isFavorite={isFavorite} onToggle={toggleFavorite} />
+
+            {/* Botón de más información a la derecha */}
+            <button
+              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick(); // Llama a la función pasada desde el padre (abre el modal)
+              }}
+              type="button"
+            >
+              Más información
+            </button>
+          </div>
           {showContent && (
             <div className="absolute inset-0 flex items-center justify-normal bg-black/80 rounded-xl z-20 animate-fade-in">
               <div className="bg-white p-4 rounded-lg shadow-lg max-w-screen-16xl w-full text-gray-800 relative max-h-60 overflow-y-auto">

@@ -8,3 +8,4 @@ export { default as ButtonCarrusel } from "./src/components/ButtonCarrusel/Butto
 export { default as GenreCarousel } from "./src/components/GenreCarousel/GenreCarousel";
 export { default as Modal } from "./src/components/Modal/Modal";
 export { default as GenreSelect } from "./src/components/GenreSelect/GenreSelect";
+export { default as ButtonFavorite } from "./src/components/ButtonFavorite/ButtonFavorite";
