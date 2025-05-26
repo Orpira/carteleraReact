@@ -164,7 +164,6 @@ const MainContent = ({
         </div>
       </section>
 
-      <div className="h-10 w-full" />
 
       {searchTerm.trim() !== "" ? (
         <section
@@ -209,7 +208,7 @@ const MainContent = ({
           </div>
         </section>
       ) : (
-        <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-gray-50">
+        <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-black">
           <div className="w-full flex flex-col gap-12 items-center p-8">
             {/* Carrusel de "Seguir viendo" */}
             {continueWatching && continueWatching.length > 0 && (

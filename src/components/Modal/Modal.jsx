@@ -33,15 +33,7 @@ const Modal = ({ isOpen, onClose, data, children }) => {
             {/* Descripción de la película */}
             <p className="text-gray-700 text-lg mb-4">{data.content}</p>
 
-            {/* Botón adicional */}
-            <div className="flex justify-end">
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                onClick={onClose}
-              >
-                Cerrar
-              </button>
-            </div>
+           
           </>
         ) : (
           // Renderizar contenido pasado como children (por ejemplo, el formulario)

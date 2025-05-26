@@ -9,7 +9,7 @@ describe("Footer", () => {
 
   it("tiene las clases de Tailwind esperadas", () => {
     const { container } = render(<Footer>Test</Footer>);
-    expect(container.firstChild.className).toContain("bg-gray-800");
+    expect(container.firstChild.className).toContain("bg-black");
     expect(container.firstChild.className).toContain("text-white");
   });
 });

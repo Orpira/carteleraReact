@@ -49,9 +49,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="p-8">
-      <header className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">
+    <div className="bg-black p-8 min-h-screen">
+      <header className="flex justify-between items-center mb-6 bg-black">
+        <h1 className="text-3xl font-bold text-white">
           {isKidsProfile ? "Perfil Infantil" : "Tu Perfil"}
         </h1>
         <div className="flex gap-4 items-center">

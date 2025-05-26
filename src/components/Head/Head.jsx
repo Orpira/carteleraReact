@@ -17,7 +17,7 @@ const Head = ({
   };
 
   return (
-    <header className="bg-gray-900 text-red flex flex-col items-center py-4 px-8 w-full">
+    <header className="bg-black text-red flex flex-col items-center py-4 px-8 w-full">
       <div className="flex items-center justify-between w-full gap-4">
         <div className="flex items-center gap-4">
           {logo && <img src={logo} alt="Logo" className="w-10 h-10" />}

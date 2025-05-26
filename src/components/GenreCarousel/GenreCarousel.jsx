@@ -15,6 +15,12 @@ const GenreCarousel = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
+  // Mostrar solo las 4 primeras del top si es "Seguir viendo"
+  const filteredMovies =
+    genreName === "Seguir viendo" && Array.isArray(cardDetPop)
+      ? cardDetPop.slice(0, 4)
+      : movies;
+
   // Función para abrir el modal con los datos de la película seleccionada
   const openModal = (movie) => {
     setSelectedMovie(movie);
@@ -28,19 +34,19 @@ const GenreCarousel = ({
   };
 
   // Validar las props
-  if (!Array.isArray(movies) || movies.length === 0) {
+  if (!Array.isArray(filteredMovies) || filteredMovies.length === 0) {
     return <p>No hay películas disponibles para el género "{genreName}".</p>;
   }
 
   // Aseguramos que siempre se muestren 5 cards
-  const safeVisibleCount = Math.min(visibleCount, movies.length);
+  const safeVisibleCount = Math.min(visibleCount, filteredMovies.length);
   const start = Math.max(0, carouselIndex);
-  const end = Math.min(start + safeVisibleCount, movies.length);
+  const end = Math.min(start + safeVisibleCount, filteredMovies.length);
 
   const canPrev = start > 0;
-  const canNext = end < movies.length;
+  const canNext = end < filteredMovies.length;
 
-  const visibleMovies = movies.slice(start, end);
+  const visibleMovies = filteredMovies.slice(start, end);
 
   const goPrev = () =>
     setCarouselIndex(Math.max(carouselIndex - safeVisibleCount, 0));
@@ -48,13 +54,13 @@ const GenreCarousel = ({
     setCarouselIndex(
       Math.min(
         carouselIndex + safeVisibleCount,
-        movies.length - safeVisibleCount
+        filteredMovies.length - safeVisibleCount
       )
     );
 
   return (
     <div key={genreName} className="w-full max-w-5xl">
-      <h3 className="text-2xl font-semibold mb-4 pl-2">{genreName}</h3>
+      <h3 className="text-2xl font-semibold mb-4 pl-2 text-white" >{genreName}</h3>
       <div className="relative flex items-center">
         <ButtonCarrusel
           direction="left"

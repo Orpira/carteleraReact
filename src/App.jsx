@@ -124,7 +124,7 @@ function App({ onSubmit }) {
   }, [searchTerm]);
 
   return (
-    <div className="bg-gray-100 min-h-screen text-gray-900 flex flex-col">
+    <div className="bg-black min-h-screen text-gray-900 flex flex-col">
       <Head
         logo="./src/assets/react.png"
         title="Movies React"
@@ -188,8 +188,6 @@ function App({ onSubmit }) {
           </div>
         </section>
 
-        {/* Espacio entre secciones */}
-        <div className="h-10 w-full" />
 
         {/* Selector de géneros */}
 
@@ -237,7 +235,7 @@ function App({ onSubmit }) {
             </div>
           </section>
         ) : (
-          <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-gray-50">
+          <section className="m-0 w-screen min-h-screen relative overflow-x-hidden overflow-y-auto pb-10 bg-black">
             <div className="w-full flex flex-col gap-12 items-center p-8">
               {selectedGenres.map((genreName) => {
                 const movies = popularByGenre[genreName] || [];
