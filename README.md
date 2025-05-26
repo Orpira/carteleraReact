@@ -90,7 +90,34 @@ El reporte se genera en [`coverage/`](coverage/).
 - Los componentes principales tienen 100% de cobertura de statements, branches y functions.
 - Puedes consultar los reportes HTML en la carpeta [`coverage/`](coverage/).
 
-## Estructura del Proyecto
+## Historial de Desarrollo
+
+### Semana del 20 al 23 de Mayo
+
+Durante esta semana, el equipo trabajó en la evolución y mejora de la librería de componentes React. Los miembros del equipo y sus contribuciones principales fueron:
+
+- **César**: 
+  - Desarrollo y mantenimiento de pruebas unitarias
+  - Implementación de casos de prueba para todos los componentes
+  - Asegurando la cobertura del 100% en los componentes principales
+
+- **Orlando**:
+  - Diseño y maquetación de la página principal
+  - Configuración inicial del proyecto y dependencias
+  - Implementación de la estructura base de la aplicación
+
+- **Ana**:
+  - Creación de la página de usuario y perfil
+  - Diseño y desarrollo de la página de perfil infantil
+  - Implementación de la lógica de autenticación
+
+- **Liliana**:
+  - Organización y estandarización de estilos CSS
+  - Implementación de Tailwind CSS
+  - Coordinación y revisión del trabajo del equipo
+  - Mejoras en la responsividad de los componentes
+
+### Estructura del Proyecto
 
 ```
 libreriaComponentes/

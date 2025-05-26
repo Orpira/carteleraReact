@@ -16,12 +16,12 @@ const MainContent = ({
   cardDetPop,
   continueWatching, // Recibir "Seguir viendo" como prop
   isKidsProfile, // Recibir el estado del perfil infantil
+   searchTerm = "",
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(0);
   const [selectedGenres, setSelectedGenres] = useState(initialGenres || []); // fallback a array vacío
   const [carouselIndexes, setCarouselIndexes] = useState({});
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchedMovies, setSearchedMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);

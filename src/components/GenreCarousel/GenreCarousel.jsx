@@ -9,37 +9,41 @@ const GenreCarousel = ({
   setCarouselIndex,
   cardDetPop,
   maxTitleLength = 22,
-  visibleCount = 5, // Aseguramos que el número de cards visibles sea 5
+  visibleCount = 5,
 }) => {
-  // Estado para manejar el modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
+  // Agrega estas funciones:
+  const openModal = (movie) => {
+    setSelectedMovie(movie);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setSelectedMovie(null);
+    setIsModalOpen(false);
+  };
   // Mostrar solo las 4 primeras del top si es "Seguir viendo"
   const filteredMovies =
     genreName === "Seguir viendo" && Array.isArray(cardDetPop)
       ? cardDetPop.slice(0, 4)
       : movies;
 
-  // Función para abrir el modal con los datos de la película seleccionada
-  const openModal = (movie) => {
-    setSelectedMovie(movie);
-    setIsModalOpen(true);
-  };
+  // Detectar si es móvil (responsive)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  React.useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  // Si es móvil, solo mostrar 1 card
+  const responsiveVisibleCount = windowWidth < 640 ? 1 : visibleCount;
 
-  // Función para cerrar el modal
-  const closeModal = () => {
-    setSelectedMovie(null);
-    setIsModalOpen(false);
-  };
-
-  // Validar las props
   if (!Array.isArray(filteredMovies) || filteredMovies.length === 0) {
     return <p>No hay películas disponibles para el género "{genreName}".</p>;
   }
 
-  // Aseguramos que siempre se muestren 5 cards
-  const safeVisibleCount = Math.min(visibleCount, filteredMovies.length);
+  const safeVisibleCount = Math.min(responsiveVisibleCount, filteredMovies.length);
   const start = Math.max(0, carouselIndex);
   const end = Math.min(start + safeVisibleCount, filteredMovies.length);
 
@@ -60,7 +64,7 @@ const GenreCarousel = ({
 
   return (
     <div key={genreName} className="w-full max-w-5xl">
-      <h3 className="text-2xl font-semibold mb-4 pl-2 text-white" >{genreName}</h3>
+      <h3 className="text-2xl font-semibold mb-4 pl-2 text-white">{genreName}</h3>
       <div className="relative flex items-center">
         <ButtonCarrusel
           direction="left"
@@ -74,12 +78,9 @@ const GenreCarousel = ({
             if (card.title.length > maxTitleLength) {
               displayTitle = card.title.slice(0, maxTitleLength - 3) + "...";
             }
-
-            // Validar cardDetPop
             const cardData = Array.isArray(cardDetPop)
               ? cardDetPop.find((c) => c.id === card.id) || card
               : card;
-
             return (
               <div
                 key={card.id || idx}
@@ -91,7 +92,7 @@ const GenreCarousel = ({
                   title={displayTitle}
                   fullScreen={false}
                   useImg={true}
-                  onClick={() => openModal(cardData)} // Llama a openModal con los datos de la película
+                  onClick={() => openModal(cardData)}
                 />
               </div>
             );
@@ -104,7 +105,6 @@ const GenreCarousel = ({
           className="right-0"
         />
       </div>
-
       {/* Modal para mostrar detalles de la película */}
       <Modal isOpen={isModalOpen} onClose={closeModal} data={selectedMovie} />
     </div>
