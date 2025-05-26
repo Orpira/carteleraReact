@@ -1,27 +1,140 @@
-import React, { useEffect, useState } from "react";
-import { Head, Footer } from "../index.js";
-import MainContent from "./components/MainContent/MainContent.jsx";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import { getInitialData } from "./config/initialData.js";
 
-function App(props) {
-  const [initialData, setInitialData] = useState(null);
+// Importa los componentes desde tus librerías personalizadas
+import {
+  Head,
+  Footer,
+  GenreSelect,
+  Card,
+  ButtonCarrusel,
+  GenreCarousel,
+  Form,
+  Modal, // Importa el Modal actualizado
+} from "../index.js";
 
-  useEffect(() => {
-    getInitialData().then(setInitialData);
-  }, []);
+// Cargar datos iniciales desde un solo archivo
+const {
+  navItems,
+  footerItems,
+  cardDetails,
+  cardDetPop,
+  genresList,
+  popularByGenre,
+  DEFAULT_GENRES_TO_SHOW,
+  initialGenres,
+  SEARCH_API,
+} = await getInitialData();
 
-  if (!initialData) return <div>Cargando...</div>;
+function App({ onSubmit }) {
+  const [formResult, setFormResult] = useState(null);
+  const [activeSection, setActiveSection] = useState("#login"); // sección activa
+  const [currentIndex, setCurrentIndex] = useState(0); // índice del carrusel
+  const [transition, setTransition] = useState(0); // para animación
+  const [selectedGenres, setSelectedGenres] = useState(initialGenres);
+  const [carouselIndexes, setCarouselIndexes] = useState({}); // Estado global para los índices de carrusel por género
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchedMovies, setSearchedMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [isMovieModalVisible, setIsMovieModalVisible] = useState(false);
+  const [isLoginFormVisible, setLoginFormVisible] = useState(false); // Estado para mostrar el formulario
+  const searchResultsRef = useRef(null); // Ref para hacer scroll a los resultados de búsqueda
+  const navigate = useNavigate(); // Hook para redirigir
+
+  // UI para seleccionar géneros a mostrar
+  const handleGenreChange = (genreName) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genreName)
+        ? prev.filter((g) => g !== genreName)
+        : [...prev, genreName]
+    );
+  };
+
+  // Carrusel: funciones para navegar
+  const goToPrev = () => {
+    setTransition(-1);
+    setTimeout(() => {
+      setCurrentIndex((prev) =>
+        prev === 0 ? cardDetails.length - 1 : prev - 1
+      );
+      setTransition(0);
+    }, 300);
+  };
+
+  const goToNext = () => {
+    setTransition(1);
+    setTimeout(() => {
+      setCurrentIndex((prev) =>
+        prev === cardDetails.length - 1 ? 0 : prev + 1
+      );
+      setTransition(0);
+    }, 300);
+  };
+
+  // Manejar clics en el Navbar
+  const handleNavClick = (href) => {
+    if (href === "#login") {
+      setLoginFormVisible(true); // Mostrar el formulario
+    } else {
+      setActiveSection(href); // Lógica existente
+    }
+  };
+
+  // Manejar envío del formulario
+  const handleFormSubmit = (data) => {
+    setFormResult(data);
+    setLoginFormVisible(false); // Ocultar el formulario después de enviar
+    if (onSubmit) onSubmit(data);
+
+    // Redirigir al perfil después de iniciar sesión
+    navigate("/profile");
+  };
+
+  // Hook para buscar películas en la API cuando searchTerm cambia
+  React.useEffect(() => {
+    let ignore = false;
+    async function fetchSearch() {
+      if (searchTerm.trim() === "") return;
+      const LOCAL_API_KEY = import.meta.env.VITE_API_KEY;
+      const url = `${SEARCH_API}api_key=${LOCAL_API_KEY}&language=es-ES&query=${encodeURIComponent(
+        searchTerm
+      )}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!ignore && data.results) {
+        setSearchedMovies(data.results);
+      }
+    }
+    fetchSearch();
+    return () => {
+      ignore = true;
+    };
+  }, [searchTerm]);
+
+  React.useEffect(() => {
+    if (searchTerm.trim() !== "" && searchResultsRef.current) {
+      setTimeout(() => {
+        searchResultsRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 2800);
+    }
+  }, [searchTerm]);
 
   return (
     <div className="bg-black min-h-screen text-gray-900 flex flex-col">
       <Head
         logo="./src/assets/react.png"
         title="Movies React"
+        navItems={navItems}
         navClassName="flex gap-4 justify-center mb-4"
+        onNavClick={handleNavClick}
+        onSearch={setSearchTerm}
       />
+      {/* Título para los tests */}
       <h1 className="sr-only">Bienvenido a mi aplicación</h1>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
       <main className="p-0 flex-1">
         {/* Modal reutilizado para el formulario */}
         <Modal
@@ -151,12 +264,6 @@ function App(props) {
           </section>
         )}
       </main>
-=======
-      <MainContent {...initialData} {...props} />
->>>>>>> Stashed changes
-=======
-      <MainContent {...initialData} {...props} />
->>>>>>> Stashed changes
       <Footer>
         &copy; {new Date().getFullYear()} Mi Sitio Web. Todos los derechos
         reservados.
